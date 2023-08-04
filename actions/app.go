@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"sync"
 
-	"mycoll/locales"
 	"mycoll/models"
 	"mycoll/public"
 
@@ -62,8 +61,6 @@ func App() *buffalo.App {
 		//   c.Value("tx").(*pop.Connection)
 		// Remove to disable this.
 		app.Use(popmw.Transaction(models.DB))
-		// Setup and use translations:
-		app.Use(translations())
 
 		app.GET("/", HomeHandler)
 
@@ -71,18 +68,6 @@ func App() *buffalo.App {
 	})
 
 	return app
-}
-
-// translations will load locale files, set up the translator `actions.T`,
-// and will return a middleware to use to load the correct locale for each
-// request.
-// for more information: https://gobuffalo.io/en/docs/localization
-func translations() buffalo.MiddlewareFunc {
-	var err error
-	if T, err = i18n.New(locales.FS(), "en-US"); err != nil {
-		app.Stop(err)
-	}
-	return T.Middleware()
 }
 
 // forceSSL will return a middleware that will redirect an incoming request

@@ -42,7 +42,7 @@ func AuthCallback(c buffalo.Context) error {
 			return errors.WithStack(err)
 		}
 	} else {
-		u.Name = gUser.UserID
+		u.Name = gUser.Email
 		u.Provider = gUser.Provider
 		u.ProviderID = gUser.UserID
 		err := tx.Save(u)
@@ -56,5 +56,21 @@ func AuthCallback(c buffalo.Context) error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
+	c.Flash().Add("Success", "You have been logged in")
 	return c.Redirect(302, "/")
+}
+
+func SetCurrentUser(next buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+		if uid := c.Session().Get("current_user_id"); uid != nil {
+			u := &models.User{}
+			tx := c.Value("tx").(*pop.Connection)
+			err := tx.Find(u, uid)
+			if err != nil {
+				return errors.WithStack(err)
+			}
+			c.Set("current_user", u)
+		}
+		return next(c)
+	}
 }

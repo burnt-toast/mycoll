@@ -19,7 +19,7 @@
   <br />
   <div>
     <%= if (current_user) { %>
-      Hello current
+      Hello <%= current_user.Name %>
       <% } else {  %>
           <a href="/auth/google"> Please sign in </a>
       <% } %> 

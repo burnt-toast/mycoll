@@ -16,6 +16,15 @@
     </div>
   </div>
 
+  <br />
+  <div>
+    <%= if (current_user) { %>
+      Hello current
+      <% } else {  %>
+          <a href="/auth/google"> Please sign in </a>
+      <% } %> 
+  </div>
+
 </header>
 
 <div class="row">

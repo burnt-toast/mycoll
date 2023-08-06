@@ -15,6 +15,8 @@ import (
 	"github.com/gobuffalo/middleware/i18n"
 	"github.com/gobuffalo/middleware/paramlogger"
 	"github.com/unrolled/secure"
+
+	"github.com/markbates/goth/gothic"
 )
 
 // ENV is used to help switch settings based on where the
@@ -63,6 +65,12 @@ func App() *buffalo.App {
 		app.Use(popmw.Transaction(models.DB))
 
 		app.GET("/", HomeHandler)
+
+		// NOTE: this block should go before any resources
+		// that need to be protected by buffalo-goth!
+		auth := app.Group("/auth")
+		auth.GET("/{provider}", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))
+		auth.GET("/{provider}/callback", AuthCallback)
 
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	})

@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+	"log"
 	"mycoll/models"
 	"net/http"
 	"os"
@@ -73,4 +74,15 @@ func SetCurrentUser(next buffalo.Handler) buffalo.Handler {
 		}
 		return next(c)
 	}
+}
+
+func AuthDestroy(c buffalo.Context) error {
+	log.Println("Made it into handler")
+	c.Session().Clear()
+	err := c.Session().Save()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	c.Flash().Add("Success", "You have been logged out")
+	return c.Redirect(302, "/")
 }

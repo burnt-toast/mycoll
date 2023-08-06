@@ -2,13 +2,16 @@ package actions
 
 import (
 	"fmt"
+	"mycoll/models"
 	"net/http"
 	"os"
 
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/pop/v6"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/google"
+	"github.com/pkg/errors"
 )
 
 func init() {
@@ -20,10 +23,38 @@ func init() {
 }
 
 func AuthCallback(c buffalo.Context) error {
-	user, err := gothic.CompleteUserAuth(c.Response(), c.Request())
+	gUser, err := gothic.CompleteUserAuth(c.Response(), c.Request())
 	if err != nil {
 		return c.Error(http.StatusUnauthorized, err)
 	}
 	// Do something with the user, maybe register them/sign them in
-	return c.Render(http.StatusOK, r.JSON(user))
+	tx := c.Value("tx").(*pop.Connection)
+	q := tx.Where("provider = ? and provider_id = ?", gUser.Provider, gUser.UserID)
+	exists, err := q.Exists("users")
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	u := &models.User{}
+	if exists {
+		err := q.First(u)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	} else {
+		u.Name = gUser.UserID
+		u.Provider = gUser.Provider
+		u.ProviderID = gUser.UserID
+		err := tx.Save(u)
+		if err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	c.Session().Set("current_user_id", u.ID)
+	err = c.Session().Save()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	return c.Redirect(302, "/")
 }

@@ -1,0 +1,33 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Collections</h3>
+  <div class="float-end">
+    <%= linkTo(newCollectionsPath(), {class: "btn btn-primary"}) { %>
+      Create New Collection
+    <% } %>
+  </div>
+</div>
+
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    <th>ID</th><th>Name</th><th>Description</th><th>Owner</th><th>SharedWith</th>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (collection) in collections { %>
+      <tr>
+        <td class="align-middle"><%= collection.ID %></td><td class="align-middle"><%= collection.Name %></td><td class="align-middle"><%= collection.Description %></td><td class="align-middle"><%= collection.Owner %></td><td class="align-middle"><%= collection.SharedWith %></td>
+        <td>
+          <div class="float-end">
+            <%= linkTo(collectionPath({ collection_id: collection.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(editCollectionPath({ collection_id: collection.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo(collectionPath({ collection_id: collection.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>

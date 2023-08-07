@@ -1,0 +1,8 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">New Collection</h3>
+</div>
+
+<%= formFor(collection, {action: collectionsPath(), method: "POST"}) { %>
+  <%= partial("collections/form.html") %>
+  <%= linkTo(collectionsPath(), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+<% } %>

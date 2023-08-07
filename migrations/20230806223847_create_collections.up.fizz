@@ -1,0 +1,7 @@
+create_table("collections") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("name", "string", {})
+	t.Column("description", "string", {})
+	t.Column("owner", "string", {})
+	t.Column("shared_with", "string", {})
+}

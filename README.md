@@ -1,4 +1,4 @@
-# Welcome to Mycoll - pronounced Michael
+# Welcome to MyColl - pronounced Michael
 
 Need a centralized place to keep track of your collections, lists, etc? Let MyColl do it for you 
 

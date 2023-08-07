@@ -74,6 +74,10 @@ func App() *buffalo.App {
 		auth.GET("/{provider}/callback", AuthCallback)
 		auth.DELETE("", AuthDestroy)
 
+		coll := app.Group("/collections")
+		coll.GET("", GetCollections)
+		coll.POST("", AddCollection)
+
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	})
 

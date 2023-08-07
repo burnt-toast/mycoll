@@ -1,0 +1,52 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Collection Details</h3>
+
+  <div class="float-end">
+    <%= linkTo(collectionsPath(), {class: "btn btn-info"}) { %>
+      Back to all Collections
+    <% } %>
+    <%= linkTo(editCollectionPath({ collection_id: collection.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+    <%= linkTo(collectionPath({ collection_id: collection.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+
+
+<ul class="list-group mb-2 ">
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">ID</label>
+    <p class="d-inline-block"><%= collection.ID %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Name</label>
+    <p class="d-inline-block"><%= collection.Name %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Description</label>
+    <p class="d-inline-block"><%= collection.Description %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Owner</label>
+    <p class="d-inline-block"><%= collection.Owner %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">SharedWith</label>
+    <p class="d-inline-block"><%= collection.SharedWith %></p>
+  </li>
+
+
+</ul>
